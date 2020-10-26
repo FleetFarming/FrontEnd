@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import styled from "styled-components";
 import { GlobalContext } from "../../context/GlobalState.js";
@@ -17,6 +17,11 @@ const Styles = styled.div`
 const Login = (props) => {
   // eslint-disable-next-line
   const { isLoggedIn, handleIsLoggedIn } = useContext(GlobalContext);
+  const [isPassCorrect, setIsPassCorrect ] = useState(true);
+
+  // useEffect(() => {
+  //   setIsPassCorrect(true)
+  // },[])
 
   const onChangeLogIn = (e) => {
     e.preventDefault();
@@ -28,21 +33,24 @@ const Login = (props) => {
       .post(`${server}${getUserId}`, { email, password })
       .then((res) => {
         console.log("data from login", res.data);
-        if (res.data.length > 0) {
-          const userId = res.data[0].user_id;
 
+        if (res.data.length > 0) {
+          setIsPassCorrect(true)
+          const userId = res.data[0].user_id;
           handleIsLoggedIn(true, userId);
           localStorage.setItem("isLoggedIn", true);
           localStorage.setItem("userId", userId);
+        } else {
+          setIsPassCorrect(false)
         }
         console.log("localStorage: ", localStorage);
       })
       .catch((err) => {
         console.log("login failed", err);
       });
-      // handleIsLoggedIn(true, 'userId');
-      // localStorage.setItem("isLoggedIn", true);
-      // localStorage.setItem("userId", 'userId');
+    // handleIsLoggedIn(true, 'userId');
+    // localStorage.setItem("isLoggedIn", true);
+    // localStorage.setItem("userId", 'userId');
   };
 
   return (
@@ -73,6 +81,11 @@ const Login = (props) => {
                 <Button variant="primary" type="submit">
                   Submit
                 </Button>
+                {!isPassCorrect ? (
+                  <div style={{ color: "red" }}>wrong email, or password</div>
+                ) : (
+                  ""
+                )}
               </Form>
             </Card.Body>
           </Card>
