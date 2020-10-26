@@ -1,55 +1,41 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import NavigationBar from "./component/NavBar/index.js";
+import Home from "./component/Home/index.js";
+import Login from "./component/Login/index.js";
+import Register from "./component/Register/index.js";
+import Profile from "./component/Profile/index.js";
+import { Container } from "react-bootstrap";
+import { GlobalProvider } from "./context/GlobalState.js";
+import { AuthRoute } from "./component/AuthRoute/index.js";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 function App() {
-  const [firstName, setFirstName] = useState(" ");
-  const [lastname, setLastName] = useState(" ");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(firstName, lastname);
-    const url = "http://localhost:5000/api/saveUser";
-    axios
-      .post(url, {
-        firstName: firstName,
-        lastName: lastname,
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello from FleetFarming</p>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Firstname:
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            ></input>
-          </label>{" "}
-          <br />
-          <label>
-            Lastname:
-            <input
-              type="text"
-              value={lastname}
-              onChange={(e) => setLastName(e.target.value)}
-            ></input>
-          </label>{" "}
-          <br />
-          <button type="submit">save</button>
-        </form>
-      </header>
-    </div>
+    <>
+      {/* <Layout> */}
+      <GlobalProvider>
+        <Router>
+          <NavigationBar />
+          <Container>
+            <Switch>
+              <Route path="/" exact component={Home} />
+              <AuthRoute path="/home" render={Home} type="private"></AuthRoute>
+              <AuthRoute path="/login" type="guest">
+                <Login/>
+              </AuthRoute>
+              <AuthRoute path="/profile" type="private">
+                <Profile/>
+              </AuthRoute>
+              <Route path="/register" component={Register} />
+            </Switch>
+          </Container>
+        </Router>
+      </GlobalProvider>
+
+      {/* </Layout> */}
+    </>
   );
 }
 
