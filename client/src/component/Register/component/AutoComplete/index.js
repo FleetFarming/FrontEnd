@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
 import Geocode from "react-geocode";
-import { GlobalContext } from "../../../../context/GlobalState.js"
+import { GlobalContext } from "../../../../context/GlobalState.js";
 
 const api_key = process.env.REACT_APP_MAP;
 Geocode.setApiKey(api_key);
@@ -103,7 +103,9 @@ export default function AutoComplete() {
       id="google-map-demo"
       style={{ width: 300 }}
       getOptionLabel={(option) =>
-        typeof option === "string" ? option : option.structured_formatting.main_text
+        typeof option === "string"
+          ? option
+          : option.structured_formatting.main_text
       }
       filterOptions={(x) => x}
       options={options}
@@ -114,20 +116,22 @@ export default function AutoComplete() {
       onChange={(event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         console.log("newValue: ", newValue);
-        Geocode.fromAddress(newValue.description).then(
-          (response) => {
-            const { lat, lng } = response.results[0].geometry.location;
-            console.log("Geocode: ");
-            console.log(lat, lng);
-            newValue.lat = lat;
-            newValue.lng = lng;
-            setValue(newValue);
-            setRegAddress({...newValue})
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+        if (newValue) {
+          Geocode.fromAddress(newValue.description).then(
+            (response) => {
+              const { lat, lng } = response.results[0].geometry.location;
+              console.log("Geocode: ");
+              console.log(lat, lng);
+              newValue.lat = lat;
+              newValue.lng = lng;
+              setValue(newValue);
+              setRegAddress({ ...newValue });
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
+        }
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
@@ -138,7 +142,9 @@ export default function AutoComplete() {
             {...params}
             label="Add a location"
             variant="outlined"
+            size="small"
             fullWidth
+            name="street"
           />
         );
       }}
