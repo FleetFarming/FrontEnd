@@ -8,11 +8,10 @@ const initialState = {
   username: localStorage.getItem("userName")
     ? localStorage.getItem("userName")
     : "",
-  userId: localStorage.getItem("userId")
-    ? localStorage.getItem("userId")
-    : "",
+  userId: localStorage.getItem("userId") ? localStorage.getItem("userId") : "",
   signUpData: {},
   profileData: {},
+  regAddress: {city:" ", country:" ", state:" "},
   isLoading: false,
   isError: false,
 };
@@ -23,13 +22,18 @@ export const GlobalProvider = (props) => {
   const [state, dispatch] = useReducer(reducers, initialState);
 
   const handleIsLoggedIn = (bol, userId) => {
-    let isLoggedIn = Boolean(bol)
-    dispatch({ type: "IS_LOGGED_IN", payload: {isLoggedIn, userId} });
+    let isLoggedIn = Boolean(bol);
+    dispatch({ type: "IS_LOGGED_IN", payload: { isLoggedIn, userId } });
   };
 
   const addProfileData = (data) => {
-    dispatch({type: "GET_PROFILE", payload: data})
-  }
+    dispatch({ type: "GET_PROFILE", payload: data });
+  };
+
+  const setRegAddress = (regAddress) => {
+    console.log("regAddress inside setRe: ", regAddress);
+    dispatch({ type: "SET_REG_ADDRESS", payload: { ...regAddress } });
+  };
 
   return (
     <GlobalContext.Provider
@@ -41,8 +45,10 @@ export const GlobalProvider = (props) => {
         userId: state.userId,
         username: state.username,
         profileData: state.profileData,
+        regAddress: state.regAddress,
         handleIsLoggedIn,
         addProfileData,
+        setRegAddress,
       }}
     >
       {props.children}

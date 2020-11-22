@@ -1,6 +1,17 @@
 export const reducers = (state, action) => {
   let { payload } = action;
   switch (action.type) {
+    case "SET_REG_ADDRESS":
+      console.log("is calling SET_REG_ADDRESS", payload);
+
+      let str = payload.structured_formatting.secondary_text
+        .split(",")
+        .map((str) => str.trim());
+      console.log("str", str);
+      return {
+        ...state,
+        regAddress: { city: str[0], state: str[1], country: str[2] },
+      };
     case "IS_LOGGED_IN":
       return {
         ...state,

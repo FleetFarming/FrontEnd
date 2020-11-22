@@ -8,7 +8,18 @@ import stateList from "../../assets/constants/us-states.json";
 import { Redirect } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalState.js";
 import BodyContainer from "../BodyContainer/index.js";
+import AutoComplete from "./component/AutoComplete/index.js";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Divider from "@material-ui/core/Divider";
+// import Button from "@material-ui/core/Button";
+
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 const { server, saveUser } = API;
+const api_key = process.env.REACT_APP_MAP;
 
 const Styles = styled.div`
   width: 50%;
@@ -17,7 +28,10 @@ const Styles = styled.div`
 `;
 
 const Register = () => {
-  const { isLoggedIn, handleIsLoggedIn } = useContext(GlobalContext);
+  const { regAddress, isLoggedIn, handleIsLoggedIn } = useContext(
+    GlobalContext
+  );
+  console.log("regAddress inside register: ", regAddress);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
@@ -32,23 +46,23 @@ const Register = () => {
       zipCode: e.target.zipCode.value,
       description: e.target.description.value,
     };
-    axios
-      .post(`${server}${saveUser}`, userData)
-      .then((res) => {
-        console.log("save user: ", res.data);
-        const { success, msg, userId } = res.data;
-        if (success) {
-          handleIsLoggedIn(true);
-          localStorage.setItem("isLoggedIn", true);
-          localStorage.setItem("userId", userId);
-          return <Redirect to="/profile" />;
-        } else {
-          console.log(msg);
-        }
-      })
-      .catch((err) => {
-        console.log("err occurred in saving user: ", err);
-      });
+    // axios
+    //   .post(`${server}${saveUser}`, userData)
+    //   .then((res) => {
+    //     console.log("save user: ", res.data);
+    //     const { success, msg, userId } = res.data;
+    //     if (success) {
+    //       handleIsLoggedIn(true);
+    //       localStorage.setItem("isLoggedIn", true);
+    //       localStorage.setItem("userId", userId);
+    //       return <Redirect to="/profile" />;
+    //     } else {
+    //       console.log(msg);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log("err occurred in saving user: ", err);
+    //   });
   };
 
   return (
@@ -99,11 +113,14 @@ const Register = () => {
                       required
                       placeholder="Address: 1234 Main St"
                     />
+                    <AutoComplete></AutoComplete>
                   </Form.Group>
 
                   <Form.Row>
                     <Form.Group as={Col} controlId="city">
-                      <Form.Control required placeholder="City" />
+                      <Form.Control required placeholder="City">
+
+                      </Form.Control>
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="state">
