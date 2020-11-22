@@ -1,13 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import NavigationBar from "./component/NavBar/index.js";
+import SideNav from "./component/SideNav/index.js";
 import Home from "./component/Home/index.js";
 import Login from "./component/Login/index.js";
 import Register from "./component/Register/index.js";
+import Map from "./component/Map/index.js";
 import Profile from "./component/Profile/index.js";
-import { Container } from "react-bootstrap";
 import { GlobalProvider } from "./context/GlobalState.js";
 import { AuthRoute } from "./component/AuthRoute/index.js";
+import BodyContainer from "./component/BodyContainer/index.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -17,20 +19,21 @@ function App() {
       {/* <Layout> */}
       <GlobalProvider>
         <Router>
-          <NavigationBar />
-          <Container>
-            <Switch>
+          <SideNav>
+          <Switch>
               <Route path="/" exact component={Home} />
               <AuthRoute path="/home" render={Home} type="private"></AuthRoute>
               <AuthRoute path="/login" type="guest">
-                <Login/>
+                <Login />
               </AuthRoute>
               <AuthRoute path="/profile" type="private">
-                <Profile/>
+                <Profile />
               </AuthRoute>
               <Route path="/register" component={Register} />
+              <Route path="/map" component={Map} />
             </Switch>
-          </Container>
+          </SideNav>
+
         </Router>
       </GlobalProvider>
 

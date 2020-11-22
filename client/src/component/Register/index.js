@@ -7,7 +7,7 @@ import { API } from "../../config/apiCalls.js";
 import stateList from "../../assets/constants/us-states.json";
 import { Redirect } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalState.js";
-
+import BodyContainer from "../BodyContainer/index.js";
 const { server, saveUser } = API;
 
 const Styles = styled.div`
@@ -56,81 +56,90 @@ const Register = () => {
       {isLoggedIn ? (
         <Redirect to={"/profile"} />
       ) : (
-        <Styles>
-          <Card>
-            <Card.Header>
-              <h4>Create An Account</h4>
-            </Card.Header>
-            <Card.Body>
-              <Form onSubmit={(e) => handleOnSubmit(e)}>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="firstName">
+        <BodyContainer>
+          <Styles>
+            <Card>
+              <Card.Header>
+                <h4>Create An Account</h4>
+              </Card.Header>
+              <Card.Body>
+                <Form onSubmit={(e) => handleOnSubmit(e)}>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="firstName">
+                      <Form.Control
+                        required
+                        type="firstName"
+                        placeholder="First Name"
+                      />
+                    </Form.Group>
+
+                    <Form.Group as={Col} controlId="lastName">
+                      <Form.Control
+                        required
+                        type="lastName"
+                        placeholder="Last Name"
+                      />
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Form.Group controlId="email">
+                    <Form.Control required type="email" placeholder="Email" />
+                  </Form.Group>
+
+                  <Form.Group controlId="password">
                     <Form.Control
                       required
-                      type="firstName"
-                      placeholder="First Name"
+                      type="password"
+                      placeholder="Password"
                     />
                   </Form.Group>
 
-                  <Form.Group as={Col} controlId="lastName">
+                  <Form.Group controlId="street">
                     <Form.Control
                       required
-                      type="lastName"
-                      placeholder="Last Name"
+                      placeholder="Address: 1234 Main St"
                     />
                   </Form.Group>
-                </Form.Row>
 
-                <Form.Group controlId="email">
-                  <Form.Control required type="email" placeholder="Email" />
-                </Form.Group>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="city">
+                      <Form.Control required placeholder="City" />
+                    </Form.Group>
 
-                <Form.Group controlId="password">
-                  <Form.Control
-                    required
-                    type="password"
-                    placeholder="Password"
-                  />
-                </Form.Group>
+                    <Form.Group as={Col} controlId="state">
+                      <Form.Control
+                        required
+                        as="select"
+                        defaultValue="Choose..."
+                      >
+                        <option>Choose...</option>
+                        {stateList.map((d, i) => (
+                          <option key={`${d}-${i}`}>{d.name}</option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
 
-                <Form.Group controlId="street">
-                  <Form.Control required placeholder="Address: 1234 Main St" />
-                </Form.Group>
+                    <Form.Group as={Col} controlId="zipCode">
+                      <Form.Control required placeholder="ZipCode" />
+                    </Form.Group>
+                  </Form.Row>
 
-                <Form.Row>
-                  <Form.Group as={Col} controlId="city">
-                    <Form.Control required placeholder="City" />
+                  <Form.Group controlId="description">
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      placeholder="Introduce yourself (optional)"
+                    />
                   </Form.Group>
 
-                  <Form.Group as={Col} controlId="state">
-                    <Form.Control required as="select" defaultValue="Choose...">
-                      <option>Choose...</option>
-                      {stateList.map((d, i) => (
-                        <option key={`${d}-${i}`}>{d.name}</option>
-                      ))}
-                    </Form.Control>
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="zipCode">
-                    <Form.Control required placeholder="ZipCode" />
-                  </Form.Group>
-                </Form.Row>
-
-                <Form.Group controlId="description">
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    placeholder="Introduce yourself (optional)"
-                  />
-                </Form.Group>
-
-                <Button variant="primary" type="submit">
-                  Register
-                </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Styles>
+                  <Button variant="primary" type="submit">
+                    Register
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Styles>
+        </BodyContainer>
       )}
     </>
   );

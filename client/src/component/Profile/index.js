@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { API } from "../../config/apiCalls.js";
-
+import BodyContainer from "../BodyContainer/index.js";
 import {
   Card,
   Row,
@@ -56,27 +56,29 @@ const Profile = () => {
       {!isLoggedIn ? (
         <Redirect to="/" />
       ) : (
-        <Styles>
-          <Row>
-            <Col>
-              <Card>
-                <Card.Header>Edit Profile</Card.Header>
-                <Card.Body className="imageContainer">
-                  <Image src={`${avator}`} roundedCircle />
-                </Card.Body>
-                <Col>
-                  <ListGroup>
-                    {/* <ListGroupItem>{`Username: ${profileData.profile_name}`}</ListGroupItem> */}
-                    <ListGroupItem>{`Full Name: ${profileData.firstName} ${profileData.lastName}`}</ListGroupItem>
-                    <ListGroupItem>{`Email: ${profileData.email}`}</ListGroupItem>
-                    <ListGroupItem>{`Description: ${profileData.description}`}</ListGroupItem>
-                    <ListGroupItem>{`Address: ${profileData.street_name}    ${profileData.city}    ${profileData.state}    ${profileData.zipcode}`}</ListGroupItem>
-                  </ListGroup>
-                </Col>
-              </Card>
-            </Col>
-          </Row>
-        </Styles>
+        <BodyContainer>
+          <Styles>
+            <Row>
+              <Col>
+                <Card>
+                  <Card.Header>Edit Profile</Card.Header>
+                  <Card.Body className="imageContainer">
+                    <Image src={`${avator}`} roundedCircle />
+                  </Card.Body>
+                  <Col>
+                    <ListGroup>
+                      {/* <ListGroupItem>{`Username: ${profileData.profile_name}`}</ListGroupItem> */}
+                      <ListGroupItem>{`Full Name: ${profileData.firstName} ${profileData.lastName}`}</ListGroupItem>
+                      <ListGroupItem>{`Email: ${profileData.email}`}</ListGroupItem>
+                      <ListGroupItem>{`Description: ${profileData.description}`}</ListGroupItem>
+                      <ListGroupItem>{`Address: ${profileData.street_name}    ${profileData.city}    ${profileData.state}    ${profileData.zipcode}`}</ListGroupItem>
+                    </ListGroup>
+                  </Col>
+                </Card>
+              </Col>
+            </Row>
+          </Styles>
+        </BodyContainer>
       )}
     </>
   );
