@@ -104,6 +104,7 @@ const Register = () => {
   );
   console.log("regAddress inside register: ", regAddress);
   const classes = useStyles();
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -127,10 +128,10 @@ const Register = () => {
         console.log("save user: ", res.data);
         const { success, msg, userId } = res.data;
         if (success) {
-          handleIsLoggedIn(true);
           localStorage.setItem("isLoggedIn", true);
           localStorage.setItem("userId", userId);
-          return <Redirect to="/profile" />;
+          handleIsLoggedIn(true);
+          // return <Redirect to="/profile" />;
         } else {
           console.log(msg);
         }

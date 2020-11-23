@@ -38,10 +38,10 @@ const Profile = () => {
   // }
 
   useEffect(() => {
-    console.log("useEffect in profile: ", localStorage);
     let userId = localStorage.getItem("userId");
+    console.log("useEffect in profile: ", localStorage, userId);
     axios
-      .get(`${server}${getUserProfile}/${userId}`)
+      .get(`${server}${getUserProfile}/${localStorage.userId}`)
       .then((res) => {
         console.log("profile: ", res.data[0]);
         addProfileData({ ...res.data[0] });

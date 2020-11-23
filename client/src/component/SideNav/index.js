@@ -193,7 +193,7 @@ const SideNav = (props) => {
                 </Link>
               </Button>
               <Button color="parimary">
-                <Link to="/Register">
+                <Link to="/register">
                   <Typography className={classes.button}>Register</Typography>
                 </Link>
               </Button>
