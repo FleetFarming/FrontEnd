@@ -3,4 +3,5 @@ export const API = {
   getUserId: "/api/getUserId",
   getUserProfile: "/api/getUserProfile",
   saveUser: "/api/saveUser",
+  getMapData: "/api/getMapData",
 }

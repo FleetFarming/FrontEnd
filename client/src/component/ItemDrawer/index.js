@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MenuOpenRoundedIcon from "@material-ui/icons/MenuOpenRounded";
@@ -11,6 +11,10 @@ import Slider from "@material-ui/core/Slider";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import ItemLists from "../ItemLists/index.js";
+import { GlobalContext } from "../../context/GlobalState.js";
+import { filterMapData } from "./helper.js";
+import data from "../Map/data.json";
+import UserPage from "./component/UserPage/index.js";
 
 const marks = [
   {
@@ -91,7 +95,12 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     height: theme.spacing(3),
   },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
   button: {
+    marginRight: "10px",
     margin: theme.spacing(1),
   },
   icon: {
@@ -106,10 +115,19 @@ function valuetext(value) {
 }
 
 const ItemDrawer = () => {
+  const classes = useStyles();
   const [open, setOpen] = useState(true);
   const [mile, setMile] = useState(0);
-  const classes = useStyles();
-
+  const [viewUser, setViewUser] = useState(false);
+  const {
+    initialMapData,
+    getMapData,
+    isLoggedIn,
+    currMapData,
+    setCurMapData,
+  } = useContext(GlobalContext);
+  const [tempCurr, setTempCurr] = useState([]);
+  const [tempCurr1, setTempCurr1] = useState([]);
   const toogleDrawer = () => {
     setOpen(!open);
   };
@@ -119,80 +137,144 @@ const ItemDrawer = () => {
     return `${value}mile`;
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { category, location, farmName, crop } = e.target;
+    const keywords = {
+      category: category.value,
+      location: location.value,
+      farmName: farmName.value,
+      crop: crop.value,
+    };
+    const result = filterMapData(tempCurr, keywords);
+    setTempCurr1(result);
+    console.log("after search", result);
+  };
+  const handleReset = (e) => {
+    e.preventDefault();
+    setTempCurr1(tempCurr);
+  };
+
+  useEffect(() => {
+    let tempData1 = data.features.map((d) => {
+      let rand = Math.floor(Math.random() * (8 - 1) + 1);
+      d.img = `./dummyList/${rand}.jpg`;
+      d.author = d.properties.NAME.slice(0, 7);
+      d.title = `${d.properties.NAME.slice(0, 7)}'s farm`;
+      return { ...d };
+    });
+    let tempData2 = currMapData.map((d) => {
+      let rand = Math.floor(Math.random() * (8 - 1) + 1);
+      d.img = `./dummyList/${rand}.jpg`;
+      d.author = d.firstName;
+      d.title = `${d.firstName}'s farm`;
+      return { ...d };
+    });
+    let final = [...tempData2, ...tempData1];
+    console.log("final in itemList: ", final);
+    setTempCurr(final);
+    setTempCurr1(final.map((d) => ({ ...d })));
+  }, [currMapData]);
+
   return (
     <div className={!open ? classes.root : classes.rootOpen}>
       <div className={classes.drawer}>
-        <Grid className={classes.gridContainer} container>
-          <form noValidate autoComplete="off">
-            <div className={classes.txtContainer}>
-              <TextField
-                className={classes.textField}
-                label="Category"
-                id="outlined-size-small"
-                variant="outlined"
-                size="small"
-                spacing={3}
-                fullWidth
-              />
-              <TextField
-                className={classes.textField}
-                label="Location"
-                id="outlined-size-small"
-                variant="outlined"
-                size="small"
-                fullWidth
-              />
+        {viewUser ? (
+          <UserPage setViewUser={setViewUser}/>
+        ) : (
+          <Grid className={classes.gridContainer} container>
+            <form onSubmit={(e) => handleSubmit(e)}>
+              <div className={classes.txtContainer}>
+                <TextField
+                  className={classes.textField}
+                  label="Category"
+                  id="outlined-size-small"
+                  variant="outlined"
+                  size="small"
+                  spacing={3}
+                  name="category"
+                  fullWidth
+                />
+                <TextField
+                  className={classes.textField}
+                  label="Location"
+                  id="outlined-size-small"
+                  variant="outlined"
+                  size="small"
+                  name="location"
+                  fullWidth
+                />
+              </div>
+              <br />
+              <div className={classes.txtContainer}>
+                <TextField
+                  className={classes.textField}
+                  label="Farm Name"
+                  id="outlined-size-small"
+                  variant="outlined"
+                  size="small"
+                  name="farmName"
+                  fullWidth
+                />
+                <TextField
+                  className={classes.textField}
+                  label="Crop"
+                  id="outlined-size-small"
+                  variant="outlined"
+                  size="small"
+                  name="crop"
+                  fullWidth
+                />
+              </div>
+              <div className={classes.slider}>
+                <Typography
+                  style={{ textAlign: "right" }}
+                  id="discrete-slider-always"
+                  gutterBottom
+                >
+                  {`< ${mile} miles`}
+                </Typography>
+                <Slider
+                  defaultValue={10}
+                  getAriaValueText={handleMiles}
+                  aria-labelledby="discrete-slider-always"
+                  step={10}
+                  valueLabelDisplay="auto"
+                />
+              </div>
+              <div className={classes.buttonContainer}>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  color="primary"
+                  className={classes.button}
+                  type="submit"
+                  fullWidth
+                >
+                  Search
+                </Button>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  color="primary"
+                  className={classes.button}
+                  type="submit"
+                  fullWidth
+                  onClick={(e) => handleReset(e)}
+                >
+                  Reset
+                </Button>
+              </div>
+            </form>
+            <Divider style={{ marginBottom: "10px" }}></Divider>
+            <div>
+              <ItemLists
+                tempCurr1={tempCurr1}
+                setViewUser={setViewUser}
+              ></ItemLists>
             </div>
-            <br />
-            <div className={classes.txtContainer}>
-              <TextField
-                className={classes.textField}
-                label="Farm Name"
-                id="outlined-size-small"
-                variant="outlined"
-                size="small"
-                fullWidth
-              />
-              <TextField
-                className={classes.textField}
-                label="Crop"
-                id="outlined-size-small"
-                variant="outlined"
-                size="small"
-                fullWidth
-              />
-            </div>
-            <div className={classes.slider}>
-              <Typography
-                style={{ textAlign: "right" }}
-                id="discrete-slider-always"
-                gutterBottom
-              >
-                {`< ${mile} miles`}
-              </Typography>
-              <Slider
-                defaultValue={10}
-                getAriaValueText={handleMiles}
-                aria-labelledby="discrete-slider-always"
-                step={10}
-                valueLabelDisplay="auto"
-              />
-            </div>
-            <Button
-              variant="contained"
-              size="medium"
-              color="primary"
-              className={classes.button}
-              fullWidth
-            >
-              Search
-            </Button>
-          </form>
-          <Divider style={{ marginBottom: "10px" }}></Divider>
-          <div>
-            <ItemLists></ItemLists>
-          </div>
-        </Grid>
+          </Grid>
+        )}
       </div>
       <div className={classes.drawerBtn}>
         {/* <Button

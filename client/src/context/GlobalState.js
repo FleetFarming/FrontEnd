@@ -1,5 +1,7 @@
 import React, { createContext, useReducer } from "react";
 import { reducers } from "./AppReducer.js";
+import axios from "axios";
+import { API } from "../config/apiCalls.js";
 
 const initialState = {
   isLoggedIn: localStorage.getItem("isLoggedIn")
@@ -11,7 +13,9 @@ const initialState = {
   userId: localStorage.getItem("userId") ? localStorage.getItem("userId") : "",
   signUpData: {},
   profileData: {},
-  regAddress: {city:" ", country:" ", state:" "},
+  initialMapData: [],
+  currMapData: [],
+  regAddress: { city: "", country: "", state: "", lat: "", lng: "" },
   isLoading: false,
   isError: false,
 };
@@ -35,6 +39,25 @@ export const GlobalProvider = (props) => {
     dispatch({ type: "SET_REG_ADDRESS", payload: { ...regAddress } });
   };
 
+  const getMapData = () => {
+    const { server, getMapData } = API;
+    axios
+      .get(`${server}${getMapData}`)
+      .then((res) => {
+        console.log("mapData from getMapData", res.data);
+        dispatch({
+          type: "GET_MAP_DATA",
+          payload: res.data.map((d) => ({ ...d })),
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const setCurMapData = (curMapData) => {
+    dispatch({ type: "SET_CUR_MAP_DATA", payload: curMapData });
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -46,9 +69,13 @@ export const GlobalProvider = (props) => {
         username: state.username,
         profileData: state.profileData,
         regAddress: state.regAddress,
+        initialMapData: state.initialMapData,
+        currMapData: state.currMapData,
         handleIsLoggedIn,
         addProfileData,
         setRegAddress,
+        getMapData,
+        setCurMapData,
       }}
     >
       {props.children}
