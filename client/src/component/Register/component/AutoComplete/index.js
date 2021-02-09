@@ -12,7 +12,7 @@ import { GlobalContext } from "../../../../context/GlobalState.js";
 
 const api_key = process.env.REACT_APP_MAP;
 Geocode.setApiKey(api_key);
-console.log("api key: ", api_key);
+console.log("api key: in autocomplete", api_key);
 function loadScript(src, position, id) {
   if (!position) {
     return;

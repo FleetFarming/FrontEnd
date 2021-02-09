@@ -6,6 +6,8 @@ import styled from "styled-components";
 import axios from "axios";
 import { API } from "../../config/apiCalls.js";
 import BodyContainer from "../BodyContainer/index.js";
+import ProfileInfo from "./Component/ProfileInfo/index.js";
+import Button from "@material-ui/core/Button";
 import {
   Card,
   Row,
@@ -21,14 +23,30 @@ const Styles = styled.div`
   .card-header {
     text-align: right;
   }
-  .imageContainer {
+
+  ,& img {
+    min-width: 150px;
+    min-height: 150px;
+  }
+  .custom_card {
     margin: auto;
   }
-  ,& img {
-    min-width: 100px;
-    min-height: 100px;
+`;
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .header_left {
   }
-  ,
+  .header_right {
+    display: flex;
+  }
+  .profile_name {
+    margin-top: 5px;
+    font-size: 20px;
+  }
+  .edit_profile {
+  }
 `;
 
 const Profile = () => {
@@ -61,19 +79,42 @@ const Profile = () => {
             <Row>
               <Col>
                 <Card>
-                  <Card.Header>Edit Profile</Card.Header>
-                  <Card.Body className="imageContainer">
-                    <Image src={`${avator}`} roundedCircle />
+                  {/* <Card.Header>Edit Profile</Card.Header> */}
+                  <Card.Body className="custom_card">
+                    <Row>
+                      <Header>
+                        <div className="header_left">
+                          <Image src={`${avator}`} roundedCircle />
+                          <div className="edit_profile">
+                            <Button variant="outlined">Edit Profile</Button>
+                          </div>
+                        </div>
+                        <section className="header_right">
+                          <p className="profile_name"> Anait's Profile</p>
+                        </section>
+                      </Header>
+                    </Row>
                   </Card.Body>
-                  <Col>
+                  {/* <Col>
                     <ListGroup>
-                      {/* <ListGroupItem>{`Username: ${profileData.profile_name}`}</ListGroupItem> */}
+                      <ListGroupItem>{`Username: ${profileData.profile_name}`}</ListGroupItem>
                       <ListGroupItem>{`Full Name: ${profileData.firstName} ${profileData.lastName}`}</ListGroupItem>
                       <ListGroupItem>{`Email: ${profileData.email}`}</ListGroupItem>
                       <ListGroupItem>{`Description: ${profileData.description}`}</ListGroupItem>
                       <ListGroupItem>{`Address: ${profileData.street_name}    ${profileData.city}    ${profileData.state}    ${profileData.zipcode}`}</ListGroupItem>
                     </ListGroup>
-                  </Col>
+                  </Col> */}
+                </Card>
+              </Col>
+            </Row>
+            <br />
+            <Row>
+              <Col>
+                <Card>
+                  {/* <Card.Header>Edit Profile</Card.Header> */}
+                  <Card.Body>
+                    <ProfileInfo />
+                  </Card.Body>
                 </Card>
               </Col>
             </Row>

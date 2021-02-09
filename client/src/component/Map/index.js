@@ -13,14 +13,15 @@ import { GlobalContext } from "../../context/GlobalState.js";
 console.log("dummyData: ", data)
 
 const api_key = process.env.REACT_APP_MAP;
+console.log("api_key: in Map", process.env)
 const libraries = ["places"];
 const mapContainerStyle = {
   width: "95vw",
   height: "92vh",
 };
 const center = {
-  lat: 43.653225,
-  lng: -79.383186,
+  lat: 25.7617,
+  lng: -80.1918,
 };
 const options = {};
 

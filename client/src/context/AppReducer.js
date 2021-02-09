@@ -16,6 +16,11 @@ export const reducers = (state, action) => {
           lng: payload.lng,
         },
       };
+    case "VIEW_OTHER_USER":
+      return {
+        ...state,
+        otherUserInfo: payload,
+      }
     case "SET_CUR_MAP_DATA":
       return {
         ...state,

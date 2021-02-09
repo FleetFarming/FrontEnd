@@ -1,9 +1,8 @@
+// eslint-disable-next-line
 import React, { useEffect, useState, useContext } from "react";
-import Drawer from "@material-ui/core/Drawer";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MenuOpenRoundedIcon from "@material-ui/icons/MenuOpenRounded";
 import DoubleArrowRounded from "@material-ui/icons/DoubleArrowRounded";
-import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -16,24 +15,24 @@ import { filterMapData } from "./helper.js";
 import data from "../Map/data.json";
 import UserPage from "./component/UserPage/index.js";
 
-const marks = [
-  {
-    value: 0,
-    label: "0 mile",
-  },
-  {
-    value: 20,
-    label: "20 mile",
-  },
-  {
-    value: 37,
-    label: "37 mile",
-  },
-  {
-    value: 100,
-    label: "100 mile",
-  },
-];
+// const marks = [
+//   {
+//     value: 0,
+//     label: "0 mile",
+//   },
+//   {
+//     value: 20,
+//     label: "20 mile",
+//   },
+//   {
+//     value: 37,
+//     label: "37 mile",
+//   },
+//   {
+//     value: 100,
+//     label: "100 mile",
+//   },
+// ];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,7 +115,7 @@ function valuetext(value) {
 
 const ItemDrawer = () => {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [mile, setMile] = useState(0);
   const [viewUser, setViewUser] = useState(false);
   const {

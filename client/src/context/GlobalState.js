@@ -15,6 +15,7 @@ const initialState = {
   profileData: {},
   initialMapData: [],
   currMapData: [],
+  otherUserInfo: {},
   regAddress: { city: "", country: "", state: "", lat: "", lng: "" },
   isLoading: false,
   isError: false,
@@ -58,6 +59,10 @@ export const GlobalProvider = (props) => {
     dispatch({ type: "SET_CUR_MAP_DATA", payload: curMapData });
   };
 
+  const setOhterUserInfo = (data) => {
+    dispatch({ type: "VIEW_OTHER_USER", payload: data });
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -71,11 +76,13 @@ export const GlobalProvider = (props) => {
         regAddress: state.regAddress,
         initialMapData: state.initialMapData,
         currMapData: state.currMapData,
+        otherUserInfo: state.otherUserInfo,
         handleIsLoggedIn,
         addProfileData,
         setRegAddress,
         getMapData,
         setCurMapData,
+        setOhterUserInfo,
       }}
     >
       {props.children}
