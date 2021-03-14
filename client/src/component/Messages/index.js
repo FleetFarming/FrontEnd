@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchIcon from "@material-ui/icons/Search";
 import avator from "../../assets/images/5.png";
@@ -7,7 +7,9 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import Button from "@material-ui/core/Button";
 import ReplyMsg from "./component/ReplyMsg/index.js";
 import ComposeMsg from "./component/ComposeMsg/index.js";
-
+import MessageBody from "./component/MessageBody/index.js";
+import axios from "axios";
+import { API } from "../../config/apiCalls.js";
 /*
   message__left
     search__bar
@@ -19,6 +21,45 @@ const Container = styled.div`
 `;
 
 const Message = () => {
+  const [totalMsg, setTotalMsg] = useState([]);
+  const [currectMsgs, setCurrectMsgs] = useState([]);
+  // useEffect(() => {
+  //   generateMessages(totalMsg)
+  // },[])
+
+  const generateMessages = (data) => {
+    const messages = data.map((d) => {
+      const { sender_name, recipient_name, send_date, message } = d;
+      return (
+        <MessageBody
+          avator={avator}
+          senderName={sender_name}
+          recipientName={recipient_name}
+          sendDate={send_date}
+          message={message}
+        />
+      );
+    });
+    console.log("inside generate message", messages)
+    setCurrectMsgs(messages)
+  };
+
+  useEffect(() => {
+    let userId = localStorage.getItem("userId");
+    console.log("inside messages useEffect");
+    axios
+      .get(`${API.server}${API.getMessages}/${userId}`)
+      .then((res) => {
+        console.log("fetch messages: ", res.data);
+        const initialData = res.data.map((d) => ({ ...d }))
+        setTotalMsg(initialData);
+        generateMessages(initialData.map(d => ({...d})));
+      })
+      .catch((err) => {
+        console.log("error in fetching messages: ", err);
+      });
+  }, []);
+
   return (
     <div className="message__container">
       <div className="message__left">
@@ -52,25 +93,7 @@ const Message = () => {
         <Container>
           <div className="message__title">This is message title</div>
         </Container>
-
-        <div className="message__body">
-          <div className="message__body__header">
-            <img src={avator} />
-            <div>Mike</div>
-            <div>March 10, 2021 at 1:05pm</div>
-          </div>
-          <div className="message__text">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
-          </div>
-        </div>
+        {currectMsgs}
       </div>
     </div>
   );

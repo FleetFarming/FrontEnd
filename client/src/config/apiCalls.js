@@ -6,4 +6,6 @@ export const API = {
   getMapData: "/api/getMapData",
   createFarmObject: "/api/createFarmObject",
   getFarmLayout: "/api/getFarmLayout",
+  createMessage: "/api/CreateMessage",
+  getMessages: "/api/getMessages",
 }

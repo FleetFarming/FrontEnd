@@ -8,6 +8,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import CreateIcon from "@material-ui/icons/Create";
 import AlertBox from "../../../AlertBox/index.js";
+import axios from "axios";
+import { API } from "../../../../config/apiCalls.js";
 
 const Container = styled.div`
   border-bottom: 1px solid lightgray;
@@ -34,25 +36,37 @@ const ComposeMsg = () => {
 
   const handleClose = () => {
     setOpen(false);
-
   };
 
   const handleCloseAlert = () => {
     setShowPop(false);
     setShowError(false);
     setShowSucess(false);
-  }
+  };
 
   const handleSendMessage = (e) => {
     console.log("handleSendMessage", recipient, description, subject);
-    setShowPop(true);
-    setTimeout(() => {
-      setShowPop(false);
-      setShowError(false);
-      setShowSucess(true);
-    }, 3000);
+    // const {body, subject, recipient, isNewConversation} = req.body
 
+    const newObj = {
+      body: description,
+      subject: subject,
+      recipient: recipient,
+      isNewConversation: true,
+    }
+    let userId = localStorage.getItem("userId");
+    axios.post(`${API.server}${API.createMessage}/${userId}`, newObj).then((res) => {
+      console.log("Success in Sending Message", res);
+    }).catch((error) => {
+      console.log("Error in Sending Message: ", error);
+    })
 
+    // setShowPop(true);
+    // setTimeout(() => {
+    //   setShowPop(false);
+    //   setShowError(false);
+    //   setShowSucess(true);
+    // }, 3000);
   };
 
   const handleOnChangeInput = (e) => {
