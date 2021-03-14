@@ -4,7 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 const BodyContainer = (props) => {
   return (
     <Container maxWidth="lg">
-      <Toolbar />
+      {/* <Toolbar /> */}
       {props.children}
     </Container>
   );

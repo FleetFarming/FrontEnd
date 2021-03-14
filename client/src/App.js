@@ -8,6 +8,7 @@ import Register from "./component/Register/index.js";
 import Map from "./component/Map/index.js";
 import Profile from "./component/Profile/index.js";
 import MyFarm from "./component/MyFarm/index.js";
+import Message from "./component/Messages/index.js";
 import { GlobalProvider } from "./context/GlobalState.js";
 import { AuthRoute } from "./component/AuthRoute/index.js";
 import BodyContainer from "./component/BodyContainer/index.js";
@@ -21,7 +22,7 @@ function App() {
       <GlobalProvider>
         <Router>
           <SideNav>
-          <Switch>
+            <Switch>
               <Route path="/" exact component={Home} />
               <AuthRoute path="/home" render={Home} type="private"></AuthRoute>
               <AuthRoute path="/login" type="guest">
@@ -33,11 +34,13 @@ function App() {
               <AuthRoute path="/myFarm" type="private">
                 <MyFarm />
               </AuthRoute>
+              <AuthRoute path="/messages" type="private">
+                <Message />
+              </AuthRoute>
               <Route path="/register" component={Register} />
               <Route path="/map" component={Map} />
             </Switch>
           </SideNav>
-
         </Router>
       </GlobalProvider>
 

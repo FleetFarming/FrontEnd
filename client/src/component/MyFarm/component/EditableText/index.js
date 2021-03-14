@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Text } from "react-konva";
 const EditableText = (props) => {
-  const { name, text, x, y, stageRef } = props;
+  const { name, text, x, y, stageRef, rotation } = props;
   const [editMode, setEditMode] = useState(false);
   const textRef = useRef();
 
@@ -49,6 +49,7 @@ const EditableText = (props) => {
   };
   return (
     <Text
+      rotation={rotation}
       fontSize={14}
       ref={textRef}
       name={name}

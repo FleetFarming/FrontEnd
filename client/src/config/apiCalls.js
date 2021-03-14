@@ -4,4 +4,6 @@ export const API = {
   getUserProfile: "/api/getUserProfile",
   saveUser: "/api/saveUser",
   getMapData: "/api/getMapData",
+  createFarmObject: "/api/createFarmObject",
+  getFarmLayout: "/api/getFarmLayout",
 }

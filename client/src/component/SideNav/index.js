@@ -242,7 +242,8 @@ const SideNav = (props) => {
       )}
       {/* <Toolbar></Toolbar> */}
       <main className={classes.content}>
-        <div className={classes.toolbar}>{props.children}</div>
+        {/* <div className={classes.toolbar}>{props.children}</div> */}
+        <div>{props.children}</div>
       </main>
     </div>
   );
