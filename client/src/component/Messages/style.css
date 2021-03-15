@@ -111,7 +111,15 @@
   /* border-top: 2px solid lightgray; */
   border-bottom: 2px solid lightgray;
 }
-
+.message__email::marker {
+  background-color: azure;
+}
+.message__email__text {
+  width: 14em; /* the element needs a fixed width (in px, em, %, etc) */
+  overflow: hidden; /* make sure it hides the content that overflows */
+  white-space: nowrap; /* don't break the line */
+  text-overflow: ellipsis;
+}
 .message__email > img {
   padding: 10px;
   border-radius: 50%;

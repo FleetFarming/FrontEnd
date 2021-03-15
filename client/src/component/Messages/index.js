@@ -10,6 +10,7 @@ import ComposeMsg from "./component/ComposeMsg/index.js";
 import MessageBody from "./component/MessageBody/index.js";
 import axios from "axios";
 import { API } from "../../config/apiCalls.js";
+import uniq from "lodash/uniq";
 /*
   message__left
     search__bar
@@ -21,8 +22,12 @@ const Container = styled.div`
 `;
 
 const Message = () => {
-  const [totalMsg, setTotalMsg] = useState([]);
+  const [initData, setInitData] = useState([]);
   const [currectMsgs, setCurrectMsgs] = useState([]);
+  const [totalConversation, setTotalConversation] = useState([]);
+  const [curConversationId, setCurConversationId] = useState(null);
+  const [curSubject, setCurSubject] = useState(null);
+  const [cacheData, setCacheData] = useState({});
   // useEffect(() => {
   //   generateMessages(totalMsg)
   // },[])
@@ -40,8 +45,7 @@ const Message = () => {
         />
       );
     });
-    console.log("inside generate message", messages)
-    setCurrectMsgs(messages)
+    setCurrectMsgs(messages);
   };
 
   useEffect(() => {
@@ -51,14 +55,58 @@ const Message = () => {
       .get(`${API.server}${API.getMessages}/${userId}`)
       .then((res) => {
         console.log("fetch messages: ", res.data);
-        const initialData = res.data.map((d) => ({ ...d }))
-        setTotalMsg(initialData);
-        generateMessages(initialData.map(d => ({...d})));
+        if (res.data.length === 0) return;
+        const initialData = res.data.map((d) => ({ ...d }));
+        const uniqConversation = [];
+        const uniqConversationID = [];
+
+        res.data.forEach((obj) => {
+          const id = obj.conversation_id;
+          if (!uniqConversationID.includes(id)) {
+            uniqConversationID.push(id);
+            uniqConversation.push({ ...obj });
+          }
+        });
+
+        setInitData(initialData);
+        setTotalConversation(uniqConversation);
+        setCurConversationId(uniqConversation[0].conversation_id);
+        setCurSubject(uniqConversation[0].subject);
+        // generateMessages(initialData.map((d) => ({ ...d })));
+
+        console.log("uniqConversation: ", uniqConversation);
+        console.log("curConversationID: ", uniqConversation[0].conversation_id);
       })
       .catch((err) => {
         console.log("error in fetching messages: ", err);
       });
   }, []);
+
+  useEffect(() => {
+    let temp = initData.filter((d) => {
+      return parseInt(d.conversation_id) === parseInt(curConversationId);
+    });
+
+    generateMessages(temp.map((d) => ({ ...d })));
+  }, [curConversationId]);
+
+  const handleSelectConversation = (e) => {
+    console.log("handleSelectConversation: ");
+    const curID = e.target.attributes.getNamedItem("cid").value;
+
+    let tmp = "";
+    let cache="";
+    totalConversation.forEach((d) => {
+      if (parseInt(d.conversation_id) === parseInt(curID)) {
+        tmp = d.subject;
+        cache = {...d}
+      }
+    });
+
+    setCurConversationId(curID);
+    setCurSubject(tmp);
+    setCacheData(cache)
+  };
 
   return (
     <div className="message__container">
@@ -69,20 +117,47 @@ const Message = () => {
             <SearchIcon />
           </div>
         </Container>
-        <div className="message__email">
-          <img src={avator} />
-          <div>
-            <div className={"message__email__name"}>Mike</div>
-            <div className={"message__email__title"}>Meeting Schedule</div>
-            <div> hi my name is mike, I would like to...</div>
-          </div>
-        </div>
+        {totalConversation
+          ? totalConversation.map((d, index) => {
+              return (
+                <div
+                  className="message__email"
+                  onClick={handleSelectConversation}
+                  key={`c-${d.conversation_id}`}
+                  cid={d.conversation_id}
+                >
+                  <img src={avator} />
+                  <div cid={d.conversation_id}>
+                    <div
+                      className={"message__email__name"}
+                      cid={d.conversation_id}
+                      name="testing"
+                    >
+                      {d.sender_name}
+                    </div>
+                    <div
+                      className={"message__email__title"}
+                      cid={d.conversation_id}
+                    >
+                      {d.subject}
+                    </div>
+                    <div
+                      className={"message__email__text"}
+                      cid={d.conversation_id}
+                    >
+                      {d.message}
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          : ""}
       </div>
       <div className="message__right">
         <Container>
           <div className="message__actionContainer">
             <ComposeMsg></ComposeMsg>
-            <ReplyMsg></ReplyMsg>
+            <ReplyMsg cacheData={cacheData}></ReplyMsg>
             <div className="message__btn">
               <Button variant="outlined">
                 <DeleteForeverIcon />
@@ -91,7 +166,7 @@ const Message = () => {
           </div>
         </Container>
         <Container>
-          <div className="message__title">This is message title</div>
+          <div className="message__title">{curSubject}</div>
         </Container>
         {currectMsgs}
       </div>
