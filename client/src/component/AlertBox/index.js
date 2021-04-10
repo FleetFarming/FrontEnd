@@ -44,7 +44,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
         <DialogTitle id="alert-dialog-title">{"Success"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The message has been sent!!
+            Done !!
           </DialogContentText>
         </DialogContent>
       </Dialog>
@@ -57,7 +57,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
         <DialogTitle id="alert-dialog-title">{"Error"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Error in sending email!!
+            Error Occured!!!
           </DialogContentText>
         </DialogContent>
       </Dialog>

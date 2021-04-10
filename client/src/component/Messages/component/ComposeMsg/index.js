@@ -54,19 +54,23 @@ const ComposeMsg = () => {
       recipient: recipient,
       isNewConversation: true,
     }
+    setShowPop(true);
     let userId = localStorage.getItem("userId");
     axios.post(`${API.server}${API.createMessage}/${userId}`, newObj).then((res) => {
       console.log("Success in Sending Message", res);
+      setTimeout(() => {
+        setShowPop(false);
+        setShowError(false);
+        setShowSucess(true);
+      }, 3000);
     }).catch((error) => {
       console.log("Error in Sending Message: ", error);
+      setTimeout(() => {
+        setShowPop(false);
+        setShowError(true);
+        setShowSucess(false);
+      }, 3000);
     })
-
-    // setShowPop(true);
-    // setTimeout(() => {
-    //   setShowPop(false);
-    //   setShowError(false);
-    //   setShowSucess(true);
-    // }, 3000);
   };
 
   const handleOnChangeInput = (e) => {

@@ -54,6 +54,7 @@ const Profile = () => {
   // if (!isLoggedIn) {
   //   return <Redirect to="/" />;
   // }
+  console.log("profileData: ", profileData)
 
   useEffect(() => {
     let userId = localStorage.getItem("userId");
@@ -84,13 +85,13 @@ const Profile = () => {
                     <Row>
                       <Header>
                         <div className="header_left">
-                          <Image src={`${avator}`} roundedCircle />
+                          <Image src={`https://picsum.photos/200`} roundedCircle />
                           <div className="edit_profile">
-                            <Button variant="outlined">Edit Profile</Button>
+                            {/* <Button variant="outlined">Edit Profile</Button> */}
                           </div>
                         </div>
                         <section className="header_right">
-                          <p className="profile_name"> Anait's Profile</p>
+                          <p className="profile_name">{`${profileData.profile_name}'s profile`}</p>
                         </section>
                       </Header>
                     </Row>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import BodyContainer from "../BodyContainer/index.js";
 import { GlobalContext } from "../../context/GlobalState.js";
+import AlertBox from "../AlertBox/index.js"
 import {
   Stage,
   Layer,
@@ -38,6 +39,15 @@ const FarmPage = () => {
   const [totalShapes, setTotalShapes] = useState([]);
   const [selectedShape, setSelectedShape] = useState("");
   const [showDelete, setShowDelete] = useState(false);
+  const [showPop, setShowPop] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [showSucess, setShowSucess] = useState(false);
+
+  const handleCloseAlert = () => {
+    setShowPop(false);
+    setShowError(false);
+    setShowSucess(false);
+  };
 
   useEffect(() => {
     let position = containerRef.current.getBoundingClientRect();
@@ -507,14 +517,24 @@ const FarmPage = () => {
         return newObject;
       });
     let userId = localStorage.getItem("userId");
-
+    setShowPop(true);
     axios
       .post(`${API.server}${API.createFarmObject}/${userId}`, { data: newData })
       .then((res) => {
         console.log("data from farmlayout submit", res.data);
+        setTimeout(() => {
+          setShowPop(false);
+          setShowError(false);
+          setShowSucess(true);
+        }, 3000);
       })
       .catch((err) => {
         console.log("login failed", err);
+        setTimeout(() => {
+          setShowPop(false);
+          setShowError(true);
+          setShowSucess(false);
+        }, 3000);
       });
 
     console.log("onSubmit 1: ", newData);
@@ -525,9 +545,9 @@ const FarmPage = () => {
   return (
     <BodyContainer>
       <button
-        style={{ width: "100px", height: "100px" }}
+        style={{ width: "100px", height: "30px" }}
         onClick={handleOnSubmit}
-      ></button>
+      >Submit</button>
       <div ref={containerRef}>
         <Stage
           width={containerSize}
@@ -604,6 +624,12 @@ const FarmPage = () => {
           ""
         )}
       </div>
+      <AlertBox
+        showPop={showPop}
+        showSucess={showSucess}
+        showError={showError}
+        handleCloseAlert={handleCloseAlert}
+      />
     </BodyContainer>
   );
 };

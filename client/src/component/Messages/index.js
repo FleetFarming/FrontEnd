@@ -28,6 +28,7 @@ const Message = () => {
   const [curConversationId, setCurConversationId] = useState(null);
   const [curSubject, setCurSubject] = useState(null);
   const [cacheData, setCacheData] = useState({});
+  const [profileName, setProfileName] = useState("");
   // useEffect(() => {
   //   generateMessages(totalMsg)
   // },[])
@@ -51,6 +52,13 @@ const Message = () => {
   useEffect(() => {
     let userId = localStorage.getItem("userId");
     console.log("inside messages useEffect");
+    axios.get(`${API.server}${API.getUserProfile}/${userId}`)
+    .then((res) => {
+      console.log("fetching userProfile: ", res.data)
+      setProfileName(res.data[0].profile_name);
+    }).catch(err => {
+      console.log("error in getting userProfile: ", err)
+    })
     axios
       .get(`${API.server}${API.getMessages}/${userId}`)
       .then((res) => {
@@ -72,6 +80,7 @@ const Message = () => {
         setTotalConversation(uniqConversation);
         setCurConversationId(uniqConversation[0].conversation_id);
         setCurSubject(uniqConversation[0].subject);
+        setCacheData(uniqConversation[0]);
         // generateMessages(initialData.map((d) => ({ ...d })));
 
         console.log("uniqConversation: ", uniqConversation);
@@ -91,7 +100,7 @@ const Message = () => {
   }, [curConversationId]);
 
   const handleSelectConversation = (e) => {
-    console.log("handleSelectConversation: ");
+
     const curID = e.target.attributes.getNamedItem("cid").value;
 
     let tmp = "";
@@ -102,7 +111,7 @@ const Message = () => {
         cache = {...d}
       }
     });
-
+    console.log("handleSelectConversation: ", cache);
     setCurConversationId(curID);
     setCurSubject(tmp);
     setCacheData(cache)
@@ -133,7 +142,7 @@ const Message = () => {
                       cid={d.conversation_id}
                       name="testing"
                     >
-                      {d.sender_name}
+                      {`${d.sender_name}, ${d.recipient_name}`}
                     </div>
                     <div
                       className={"message__email__title"}
@@ -157,7 +166,7 @@ const Message = () => {
         <Container>
           <div className="message__actionContainer">
             <ComposeMsg></ComposeMsg>
-            <ReplyMsg cacheData={cacheData}></ReplyMsg>
+            <ReplyMsg cacheData={cacheData} profileName={profileName}></ReplyMsg>
             <div className="message__btn">
               <Button variant="outlined">
                 <DeleteForeverIcon />
