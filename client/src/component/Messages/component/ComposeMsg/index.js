@@ -28,7 +28,7 @@ const ComposeMsg = () => {
   const [subject, setSubject] = useState("");
   const [showPop, setShowPop] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [showSucess, setShowSucess] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -41,7 +41,7 @@ const ComposeMsg = () => {
   const handleCloseAlert = () => {
     setShowPop(false);
     setShowError(false);
-    setShowSucess(false);
+    setShowSuccess(false);
   };
 
   const handleSendMessage = (e) => {
@@ -61,14 +61,14 @@ const ComposeMsg = () => {
       setTimeout(() => {
         setShowPop(false);
         setShowError(false);
-        setShowSucess(true);
+        setShowSuccess(true);
       }, 3000);
     }).catch((error) => {
       console.log("Error in Sending Message: ", error);
       setTimeout(() => {
         setShowPop(false);
         setShowError(true);
-        setShowSucess(false);
+        setShowSuccess(false);
       }, 3000);
     })
   };
@@ -138,7 +138,7 @@ const ComposeMsg = () => {
       </Dialog>
       <AlertBox
         showPop={showPop}
-        showSucess={showSucess}
+        showSuccess={showSuccess}
         showError={showError}
         handleCloseAlert={handleCloseAlert}
       />

@@ -10,8 +10,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
   const [open, setOpen] = useState(false);
   // const [showPop, setShowPop] = useState(false);
   // const [showError, setShowError] = useState(false);
-  // const [showSucess, setShowSucess] = useState(false);
-  const{showPop, showSucess, showError, handleCloseAlert} = props;
+  // const [showSuccess, setshowSuccess] = useState(false);
+  const{showPop, showSuccess, showError, handleCloseAlert} = props;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -36,7 +36,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
         </DialogContent>
       </Dialog>
       <Dialog
-        open={showSucess}
+        open={showSuccess}
         onClose={handleCloseAlert}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

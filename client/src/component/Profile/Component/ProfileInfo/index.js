@@ -9,10 +9,11 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Chip from "@material-ui/core/Chip";
 import axios from "axios";
-import Paper from "@material-ui/core/Paper";
-import CardMedia from "@material-ui/core/CardMedia";
-
+import Button from "@material-ui/core/Button";
+import {API} from "../../../../config/apiCalls.js";
+import UploadGallery from "../UploadGallery/index.js"
 import styled from "styled-components";
+import AlertBox from "../../../AlertBox/index.js"
 import { Card } from "@material-ui/core";
 
 function TabPanel(props) {
@@ -52,17 +53,31 @@ const ProfileInfo = () => {
   const tabsStyles = plainTabsStylesHook.useTabs();
   const tabItemStyles = plainTabsStylesHook.useTabItem();
   const { profileData } = useContext(GlobalContext);
-  const handleChange = (event, newValue) => {
-    console.log("newValue: ", newValue);
-    setValue(newValue);
-  };
-  const [dummyData, setDummyData] = React.useState([]);
-  useEffect(() => {
-    axios.get("https://picsum.photos/v2/list").then((res) => {
+
+
+  const handleGallery = () =>{
+    console.log("inside handle gallery: ")
+    const URL = `${API.server}${API.getGallery}/${profileData.user_id}`
+    console.log("API: ", URL, profileData)
+    axios.get(URL).then((res) => {
       console.log("res data: ", res.data);
       setDummyData(res.data.map((d) => ({ ...d })));
     });
+  }
+
+  const handleChange = (event, newValue) => {
+    console.log("newValue: ", newValue);
+    setValue(newValue);
+    if (newValue === "gallery") {
+      handleGallery();
+    }
+  };
+  const [dummyData, setDummyData] = React.useState([]);
+  useEffect(() => {
+
   }, []);
+
+
 
   return (
     <div>
@@ -109,13 +124,20 @@ const ProfileInfo = () => {
           </div>
         </GridContainer>
       </TabPanel>
-      <TabPanel value={value} index="gallery" style={{ display: "flex" }}>
-        <div style={{ display: "flex",flexWrap: "wrap" }}>
+      <TabPanel onClick={handleGallery} value={value} index="gallery" style={{ display: "relative", }}>
+        <div  style={{ display:"inline-block", position:"relative",width: "100%"}}>
+          {/* <Button variant="outlined" style={{ display:"block", float: "right" }}>
+            Add Photos
+          </Button> */}
+          <UploadGallery profileData={profileData} />
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
           {dummyData
             ? dummyData.map((d) => {
                 return (
                   <div style={{ padding: "5px", flexDirection: "row" }}>
-                    <img src={d.download_url} height={20} width={80} />
+                    <img src={d.photo_url} height={20} width={80} />
                   </div>
                 );
               })

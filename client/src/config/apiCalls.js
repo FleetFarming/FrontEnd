@@ -8,4 +8,7 @@ export const API = {
   getFarmLayout: "/api/getFarmLayout",
   createMessage: "/api/CreateMessage",
   getMessages: "/api/getMessages",
+  getGallery: "/api/getGallery",
+  getProfilePicture:"/api/getProfilePicture",
+  saveImage: "/api/saveImage",
 }
