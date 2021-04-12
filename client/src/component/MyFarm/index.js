@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import BodyContainer from "../BodyContainer/index.js";
 import { GlobalContext } from "../../context/GlobalState.js";
-import AlertBox from "../AlertBox/index.js"
+import AlertBox from "../AlertBox/index.js";
 import {
   Stage,
   Layer,
@@ -119,7 +119,7 @@ const FarmPage = () => {
         });
 
         console.log("initial data from fetch data: ", initialData);
-        generateInitialShape(initialData)
+        generateInitialShape(initialData);
       })
       .catch((err) => {
         console.log("err in fetching farmlayout", err);
@@ -269,12 +269,10 @@ const FarmPage = () => {
         );
       }
 
-
       shapesArray.push(newShape);
     });
     var shapes = shapesArray.map((d) => ({ ...d }));
     setTotalShapes(shapes);
-
   };
   // useEffect(() => {
   //   let transformer = transformerRef.current;
@@ -370,7 +368,6 @@ const FarmPage = () => {
     // console.log("rectX", e.target.children[0].scaleX());
     // console.log("textX", e.target.children[1].scaleX());
   };
-
 
   const onDragEnd = (shape) => {
     let newShape;
@@ -518,24 +515,28 @@ const FarmPage = () => {
       });
     let userId = localStorage.getItem("userId");
     setShowPop(true);
-    axios
-      .post(`${API.server}${API.createFarmObject}/${userId}`, { data: newData })
-      .then((res) => {
-        console.log("data from farmlayout submit", res.data);
-        setTimeout(() => {
-          setShowPop(false);
-          setShowError(false);
-          setShowSucess(true);
-        }, 3000);
-      })
-      .catch((err) => {
-        console.log("login failed", err);
-        setTimeout(() => {
-          setShowPop(false);
-          setShowError(true);
-          setShowSucess(false);
-        }, 3000);
-      });
+    axios.post(`${API.server}${API.deleteLayout}/${userId}`).then((res) => {
+      axios
+        .post(`${API.server}${API.createFarmObject}/${userId}`, {
+          data: newData,
+        })
+        .then((res) => {
+          console.log("data from farmlayout submit", res.data);
+          setTimeout(() => {
+            setShowPop(false);
+            setShowError(false);
+            setShowSucess(true);
+          }, 3000);
+        })
+        .catch((err) => {
+          console.log("login failed", err);
+          setTimeout(() => {
+            setShowPop(false);
+            setShowError(true);
+            setShowSucess(false);
+          }, 3000);
+        });
+    });
 
     console.log("onSubmit 1: ", newData);
 
@@ -547,7 +548,9 @@ const FarmPage = () => {
       <button
         style={{ width: "100px", height: "30px" }}
         onClick={handleOnSubmit}
-      >Submit</button>
+      >
+        Submit
+      </button>
       <div ref={containerRef}>
         <Stage
           width={containerSize}

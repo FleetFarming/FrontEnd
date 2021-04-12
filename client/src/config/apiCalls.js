@@ -13,4 +13,5 @@ export const API = {
   getProfilePicture:"/api/getProfilePicture",
   saveImage: "/api/saveImage",
   deleteMessage:"/api/deleteMessage",
+  deleteLayout:"/api/deleteLayout",
 }
