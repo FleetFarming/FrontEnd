@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Gallery from "react-grid-gallery";
 import axios from "axios";
 import { API } from "../../../../config/apiCalls.js";
 import styled from "styled-components";
