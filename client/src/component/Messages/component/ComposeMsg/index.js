@@ -111,6 +111,8 @@ const ComposeMsg = (props) => {
               <input
                 type="text"
                 name="recipient"
+                disabled
+                value={profileData.profile_name}
                 onChange={handleOnChangeInput}
               />
             </div>
