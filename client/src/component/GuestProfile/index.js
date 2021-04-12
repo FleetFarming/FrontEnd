@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import React, { useEffect, useContext, useRef, useState } from "react";
 import { GlobalContext } from "../../context/GlobalState.js";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { API } from "../../config/apiCalls.js";
@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import FormData from "form-data";
 import EditProfile from "./Component/EditProfile/index.js";
 import Avatar from "@material-ui/core/Avatar";
+import ComposeMsg from "../Messages/component/ComposeMsg/index.js"
 import {
   Card,
   Row,
@@ -51,23 +52,23 @@ const Header = styled.div`
     font-size: 20px;
   }
   .edit_profile {
+    display: flex;
   }
 `;
 
-const Profile = (props) => {
+const GuestProfile = (props) => {
   const { isLoggedIn, addProfileData, profileData } = useContext(GlobalContext);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentProfilePic, setCurrentProfilePic] = useState("");
   const inputFile = useRef(null);
-
+  let {userId} = useParams();
   // if (!isLoggedIn) {
   //   return <Redirect to="/" />;
   // }
-  console.log("profileData: ", profileData);
+  console.log("Guest Profile Dat: ", profileData, userId);
 
   useEffect(() => {
-    const userId = props.userId ? props.userId : localStorage.getItem("userId");
-    console.log("useEffect in profile: ", localStorage, userId);
+    console.log("Guest Profile Dat: ", profileData, userId);
     setCurrentUserId(userId);
   }, []);
 
@@ -134,7 +135,7 @@ const Profile = (props) => {
                             Change Profile
                             <input ref={inputFile} type="file" hidden onChange={onImageChange} />
                           </Button> */}
-                          <EditProfile fetchProfileImage={fetchProfileImage} profileData={profileData}></EditProfile>
+                          <ComposeMsg profileData={profileData}></ComposeMsg>
                         </div>
                       </Header>
                     </Row>
@@ -160,4 +161,4 @@ const Profile = (props) => {
   );
 };
 
-export default Profile;
+export default GuestProfile;

@@ -21,7 +21,7 @@ const Recipient = styled.input`
   height: 30px;
 `;
 
-const ComposeMsg = () => {
+const ComposeMsg = (props) => {
   const [open, setOpen] = useState(false);
   const [recipient, setRecipient] = useState("");
   const [description, setDescription] = useState("");
@@ -29,7 +29,7 @@ const ComposeMsg = () => {
   const [showPop, setShowPop] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-
+  const {profileData} = props;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -53,9 +53,12 @@ const ComposeMsg = () => {
       subject: subject,
       recipient: recipient,
       isNewConversation: true,
+      recipientId: profileData.user_id,
+      conversationId: null
     }
     setShowPop(true);
     let userId = localStorage.getItem("userId");
+    console.log("inside composeMsg ", profileData, newObj)
     axios.post(`${API.server}${API.createMessage}/${userId}`, newObj).then((res) => {
       console.log("Success in Sending Message", res);
       setTimeout(() => {

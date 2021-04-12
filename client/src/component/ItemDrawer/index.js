@@ -15,25 +15,6 @@ import { filterMapData } from "./helper.js";
 import data from "../Map/data.json";
 import UserPage from "./component/UserPage/index.js";
 
-// const marks = [
-//   {
-//     value: 0,
-//     label: "0 mile",
-//   },
-//   {
-//     value: 20,
-//     label: "20 mile",
-//   },
-//   {
-//     value: 37,
-//     label: "37 mile",
-//   },
-//   {
-//     value: 100,
-//     label: "100 mile",
-//   },
-// ];
-
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
@@ -49,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   rootOpen: {
     position: "absolute",
-    minWidth: "35vw",
+    maxWidth: "35vw",
     display: "flex",
     flexDirection: "row",
     flexGrow: 1,
@@ -117,6 +98,7 @@ const ItemDrawer = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [mile, setMile] = useState(0);
+  const [miniProfileData, setMiniProfileData] = useState([]);
   const [viewUser, setViewUser] = useState(false);
   const {
     initialMapData,
@@ -155,6 +137,7 @@ const ItemDrawer = () => {
   };
 
   useEffect(() => {
+    console.log("wtf is that ", currMapData);
     let tempData1 = data.features.map((d) => {
       let rand = Math.floor(Math.random() * (8 - 1) + 1);
       d.img = `./dummyList/${rand}.jpg`;
@@ -179,7 +162,10 @@ const ItemDrawer = () => {
     <div className={!open ? classes.root : classes.rootOpen}>
       <div className={classes.drawer}>
         {viewUser ? (
-          <UserPage setViewUser={setViewUser}/>
+          <UserPage
+            setViewUser={setViewUser}
+            miniProfileData={miniProfileData}
+          />
         ) : (
           <Grid className={classes.gridContainer} container>
             <form onSubmit={(e) => handleSubmit(e)}>
@@ -270,6 +256,7 @@ const ItemDrawer = () => {
               <ItemLists
                 tempCurr1={tempCurr1}
                 setViewUser={setViewUser}
+                setMiniProfileData={setMiniProfileData}
               ></ItemLists>
             </div>
           </Grid>

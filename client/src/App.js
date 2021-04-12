@@ -11,7 +11,7 @@ import MyFarm from "./component/MyFarm/index.js";
 import Message from "./component/Messages/index.js";
 import { GlobalProvider } from "./context/GlobalState.js";
 import { AuthRoute } from "./component/AuthRoute/index.js";
-import BodyContainer from "./component/BodyContainer/index.js";
+import GuestProfile from "./component/GuestProfile/index.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -36,6 +36,9 @@ function App() {
               </AuthRoute>
               <AuthRoute path="/messages" type="private">
                 <Message />
+              </AuthRoute>
+              <AuthRoute path="/guestProfile/:userId" type="private">
+                <GuestProfile />
               </AuthRoute>
               <Route path="/register" component={Register} />
               <Route path="/map" component={Map} />

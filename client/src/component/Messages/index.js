@@ -3,8 +3,7 @@ import styled from "styled-components";
 import SearchIcon from "@material-ui/icons/Search";
 import avator from "../../assets/images/5.png";
 import "./style.css";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import Button from "@material-ui/core/Button";
+import DeleteMsg from "./component/DeleteConvo/index.js";
 import ReplyMsg from "./component/ReplyMsg/index.js";
 import ComposeMsg from "./component/ComposeMsg/index.js";
 import MessageBody from "./component/MessageBody/index.js";
@@ -23,7 +22,7 @@ const Container = styled.div`
 
 const Message = () => {
   const [initData, setInitData] = useState([]);
-  const [currectMsgs, setCurrectMsgs] = useState([]);
+  const [currentMsgs, setCurrentMsgs] = useState([]);
   const [totalConversation, setTotalConversation] = useState([]);
   const [curConversationId, setCurConversationId] = useState(null);
   const [curSubject, setCurSubject] = useState(null);
@@ -34,8 +33,9 @@ const Message = () => {
   // },[])
 
   const generateMessages = (data) => {
+    console.log("generate MEssage: ", data)
     const messages = data.map((d) => {
-      const { sender_name, recipient_name, send_date, message } = d;
+      const { sender_name, recipient_name, send_date, message, message_id } = d;
       return (
         <MessageBody
           avator={avator}
@@ -43,15 +43,15 @@ const Message = () => {
           recipientName={recipient_name}
           sendDate={send_date}
           message={message}
+          messageId={message_id}
         />
       );
     });
-    setCurrectMsgs(messages);
+    setCurrentMsgs(messages);
   };
 
-  useEffect(() => {
+  const fetchMessages = () => {
     let userId = localStorage.getItem("userId");
-    console.log("inside messages useEffect");
     axios.get(`${API.server}${API.getUserProfile}/${userId}`)
     .then((res) => {
       console.log("fetching userProfile: ", res.data)
@@ -89,6 +89,10 @@ const Message = () => {
       .catch((err) => {
         console.log("error in fetching messages: ", err);
       });
+  }
+
+  useEffect(() => {
+    fetchMessages();
   }, []);
 
   useEffect(() => {
@@ -165,19 +169,15 @@ const Message = () => {
       <div className="message__right">
         <Container>
           <div className="message__actionContainer">
-            <ComposeMsg></ComposeMsg>
-            <ReplyMsg cacheData={cacheData} profileName={profileName}></ReplyMsg>
-            <div className="message__btn">
-              <Button variant="outlined">
-                <DeleteForeverIcon />
-              </Button>
-            </div>
+            {/* <ComposeMsg></ComposeMsg> */}
+            <ReplyMsg cacheData={cacheData} profileName={profileName} fetchMessages={fetchMessages}></ReplyMsg>
+            <DeleteMsg cacheData={cacheData} fetchMessages={fetchMessages} profileName={profileName}></DeleteMsg>
           </div>
         </Container>
         <Container>
           <div className="message__title">{curSubject}</div>
         </Container>
-        {currectMsgs}
+        {currentMsgs}
       </div>
     </div>
   );

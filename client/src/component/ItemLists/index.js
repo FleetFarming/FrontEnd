@@ -125,14 +125,26 @@ const useStyles = makeStyles((theme) => ({
 
 const ItemLists = (props) => {
   const classes = useStyles();
-  const {tempCurr1, setViewUser} = props;
+  const { tempCurr1, setViewUser, setMiniProfileData } = props;
+
+  const handleOnClick = (data)  => {
+    console.log("image: ", data)
+    setViewUser(true);
+    setMiniProfileData(data);
+  }
+
   return (
     <div className={classes.root}>
       <GridList cellHeight={180} className={classes.gridList} cols={3}>
         {tempCurr1.length > 0
           ? tempCurr1.map((tile, i) => (
               <GridListTile key={`${tile.img}_${i}`} cols={1}>
-                <img className={classes.img} src={tile.img} alt={tile.title} onClick={() => setViewUser(true)}/>
+                <img
+                  className={classes.img}
+                  src={tile.img}
+                  alt={tile.title}
+                  onClick={() => handleOnClick(tile)}
+                />
                 <GridListTileBar
                   title={tile.title}
                   subtitle={<span>by: {tile.author}</span>}
