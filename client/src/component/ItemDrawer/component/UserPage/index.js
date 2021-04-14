@@ -8,6 +8,7 @@ import Chip from "@material-ui/core/Chip";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import { Redirect, useHistory } from "react-router-dom";
 import ImageOutlinedIcon from "@material-ui/icons/ImageOutlined";
+import ComposeMsg from "../ComposeMsg/index.js"
 import "./styles.css";
 const ChipContainer = styled.div`
   display: flex;
@@ -99,7 +100,7 @@ const UserPage = (props) => {
         >
           View Profile
         </Button>
-        <Button
+        {/* <Button
           style={{ margin: "10px" }}
           color="primary"
           variant="contained"
@@ -108,7 +109,8 @@ const UserPage = (props) => {
           fullWidth
         >
           Message
-        </Button>
+        </Button> */}
+        <ComposeMsg profileData={miniProfileData}></ComposeMsg>
       </div>
       <Divider style={{ marginBottom: "10px" }}></Divider>
       <div className="info__row">

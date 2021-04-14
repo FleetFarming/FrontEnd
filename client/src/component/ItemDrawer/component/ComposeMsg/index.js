@@ -10,7 +10,7 @@ import CreateIcon from "@material-ui/icons/Create";
 import AlertBox from "../../../AlertBox/index.js";
 import axios from "axios";
 import { API } from "../../../../config/apiCalls.js";
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
+
 const Container = styled.div`
   border-bottom: 1px solid lightgray;
 `;
@@ -29,7 +29,7 @@ const ComposeMsg = (props) => {
   const [showPop, setShowPop] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const {profileData} = props;
+  const { profileData } = props;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -54,26 +54,29 @@ const ComposeMsg = (props) => {
       recipient: recipient,
       isNewConversation: true,
       recipientId: profileData.user_id,
-      conversationId: null
-    }
+      conversationId: null,
+    };
     setShowPop(true);
     let userId = localStorage.getItem("userId");
-    console.log("inside composeMsg ", profileData, newObj)
-    axios.post(`${API.server}${API.createMessage}/${userId}`, newObj).then((res) => {
-      console.log("Success in Sending Message", res);
-      setTimeout(() => {
-        setShowPop(false);
-        setShowError(false);
-        setShowSuccess(true);
-      }, 3000);
-    }).catch((error) => {
-      console.log("Error in Sending Message: ", error);
-      setTimeout(() => {
-        setShowPop(false);
-        setShowError(true);
-        setShowSuccess(false);
-      }, 3000);
-    })
+    console.log("inside composeMsg ", profileData, newObj);
+    axios
+      .post(`${API.server}${API.createMessage}/${userId}`, newObj)
+      .then((res) => {
+        console.log("Success in Sending Message", res);
+        setTimeout(() => {
+          setShowPop(false);
+          setShowError(false);
+          setShowSuccess(true);
+        }, 3000);
+      })
+      .catch((error) => {
+        console.log("Error in Sending Message: ", error);
+        setTimeout(() => {
+          setShowPop(false);
+          setShowError(true);
+          setShowSuccess(false);
+        }, 3000);
+      });
   };
 
   const handleOnChangeInput = (e) => {
@@ -94,12 +97,20 @@ const ComposeMsg = (props) => {
   };
 
   return (
-    <div>
-      <div className="message__btn">
-        <Button variant="outlined" onClick={handleClickOpen}>
-          <MailOutlineIcon></MailOutlineIcon>
-        </Button>
-      </div>
+    <>
+      {/* <div className="message__btn"> */}
+      <Button
+        style={{ margin: "10px" }}
+        color="primary"
+        variant="contained"
+        size="medium"
+        type="submit"
+        fullWidth
+        onClick={handleClickOpen}
+      >
+        Message
+      </Button>
+      {/* </div> */}
       <Dialog open={open} aria-labelledby="form-dialog-title" maxWidth="lg">
         <Container>
           <DialogTitle id="form-dialog-title">Compose Message</DialogTitle>
@@ -147,7 +158,7 @@ const ComposeMsg = (props) => {
         showError={showError}
         handleCloseAlert={handleCloseAlert}
       />
-    </div>
+    </>
   );
 };
 
